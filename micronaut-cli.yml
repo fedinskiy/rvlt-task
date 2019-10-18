@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: ru.fedinskiy
+---
+testFramework: junit
+sourceLanguage: java
