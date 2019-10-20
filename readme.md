@@ -1,5 +1,6 @@
-Simple implementation of money transfer API
-By default, port 8080 is used
+Simple implementation of money transfer API.
+
+By default, port 8080 is used.
 
 ## Build&Run
 ### Run for testing purposes
