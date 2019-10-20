@@ -1,4 +1,4 @@
-package ru.fedinskiy.hello;
+package ru.fedinskiy.heartbeat;
 
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
