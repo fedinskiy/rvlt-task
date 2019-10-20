@@ -31,9 +31,10 @@ By default, port 8080 is used.
 ## TODOs:
 - Add account creation API and remove database 'loading'
 - Add thread-safety
-- Update account in database woth ACID transactions
-- Tune up native image generation
-- Use some web router instead of framework
+- Update account in database with ACID transactions
+- Decouple account stored in database from wrapper object
 - Add error handling
-- Add history of transactions
 - Add validation of input parameters
+- Add history of transactions
+- Use some web router instead of framework
+- Tune up native image generation
