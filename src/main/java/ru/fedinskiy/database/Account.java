@@ -3,9 +3,9 @@ package ru.fedinskiy.database;
 public interface Account {
 	int getId();
 
-	void add(int sum);
+	Account add(int sum);
 
-	void withdraw(int sum);
+	Account withdraw(int sum);
 
 	int getCurrentAmount();
 }

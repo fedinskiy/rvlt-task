@@ -37,7 +37,7 @@ class AccountControllerITest {
 
 	@Test
 	void getAccountInfo() {
-		final String accountUri = "/accounts/112";
+		final String accountUri = "/accounts/12";
 		final String initialSum = "113";
 		client.toBlocking()
 				.exchange(HttpRequest.POST(accountUri, initialSum)

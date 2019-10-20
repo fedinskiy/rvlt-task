@@ -24,8 +24,12 @@ public class AccountAccessor {
 	}
 
 	public void createAccount(int id, int amount) {
-		final MemoryStoredAccount account = new MemoryStoredAccount(id);
-		account.add(amount);
-		database.put(account);
+		final MemoryStoredAccount account = new MemoryStoredAccount(id).add(amount);
+		synchronized (database){
+			if(database.get(id).isPresent()){
+				throw new IllegalStateException("Account with this if exists!");
+			}
+			database.createIfNotExist(account);
+		}
 	}
 }

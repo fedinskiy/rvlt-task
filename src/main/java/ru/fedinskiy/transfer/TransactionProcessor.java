@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 @Prototype
 public class TransactionProcessor {
-	private final AccountDatabase database;
+	private final AccountDatabase<Account> database;
 
 	@Inject
 	public TransactionProcessor(AccountDatabase database) {

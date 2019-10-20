@@ -34,8 +34,8 @@ class TransferControllerITest {
 
 	@BeforeEach
 	void setUp() {
-		database.put(first);
-		database.put(second);
+		database.createIfNotExist(first);
+		database.createIfNotExist(second);
 	}
 
 	@Test
