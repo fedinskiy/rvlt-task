@@ -41,7 +41,7 @@ public class MemoryStoredDatabase implements AccountDatabase<MemoryStoredAccount
 		}
 
 		if (!existing.canBeChangedTo(account)) {
-			throw new ConcurrentModificationException("Account " + id + "was changed in another thread");
+			throw new ConcurrentModificationException("Account " + id + " was changed in another thread");
 		}
 
 		return accounts.replace(id, existing, account);

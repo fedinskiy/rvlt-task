@@ -20,14 +20,14 @@ public class AccountAccessor {
 	public int getCurrentSumOnAccount(int id) {
 		Optional<Account> account = database.get(id);
 		return account.map(Account::getCurrentAmount)
-				.orElseThrow(() -> new IllegalStateException("Account not found!"));
+				.orElseThrow(() -> new IllegalStateException("Account " + id + " not found!"));
 	}
 
 	public void createAccount(int id, int amount) {
 		final MemoryStoredAccount account = new MemoryStoredAccount(id).add(amount);
-		synchronized (database){
-			if(database.get(id).isPresent()){
-				throw new IllegalStateException("Account with this if exists!");
+		synchronized (database) {
+			if (database.get(id).isPresent()) {
+				throw new IllegalStateException("Account with id " + id + " exists!");
 			}
 			database.createIfNotExist(account);
 		}
