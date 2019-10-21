@@ -9,7 +9,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TransactionProcessorTest {
-	private final TestDatabase database = new TestDatabase();
+	private final AccountDatabase database = new TestDatabase();
 	private final TransactionProcessor processor = new TransactionProcessor(database);
 
 	@Test

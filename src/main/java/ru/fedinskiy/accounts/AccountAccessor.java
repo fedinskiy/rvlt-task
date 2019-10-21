@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Prototype
 public class AccountAccessor {
-	private final AccountDatabase database;
+	private final AccountDatabase<Account> database;
 
 	@Inject
-	public AccountAccessor(AccountDatabase database) {
+	public AccountAccessor(AccountDatabase<Account> database) {
 		this.database = database;
 	}
 

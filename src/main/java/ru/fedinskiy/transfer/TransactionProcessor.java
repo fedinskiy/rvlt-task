@@ -11,7 +11,7 @@ public class TransactionProcessor {
 	private final AccountDatabase<Account> database;
 
 	@Inject
-	public TransactionProcessor(AccountDatabase database) {
+	public TransactionProcessor(AccountDatabase<Account> database) {
 		this.database = database;
 	}
 
