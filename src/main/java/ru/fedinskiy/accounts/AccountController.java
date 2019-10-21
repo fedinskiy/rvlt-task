@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 
 @Controller("/accounts")
@@ -16,12 +17,16 @@ public class AccountController {
 
 	@Post("/{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public HttpResponse create(@PathVariable("id") String id,
-	                           String initialAmount) {
-		accounts.createAccount(Integer.parseInt(id),
-				Integer.parseInt(initialAmount));
+	public HttpResponse create(@PathVariable("id") Integer id,
+	                           @Nullable Integer initialAmount) {
+		accounts.createAccount(id,
+				nullToZero(initialAmount));
 		return HttpResponse
 				.created(getIdAccessURI(id));
+	}
+
+	private int nullToZero(Integer nullable) {
+		return nullable == null ? 0 : nullable;
 	}
 
 	private static URI getIdAccessURI(Object id) {
@@ -29,8 +34,8 @@ public class AccountController {
 	}
 
 	@Get("/{id}")
-	public HttpResponse getAccountInfo(@PathVariable("id") String id) {
-		final int sum = accounts.getCurrentSumOnAccount(Integer.parseInt(id));
+	public HttpResponse getAccountInfo(@PathVariable("id") Integer id) {
+		final int sum = accounts.getCurrentSumOnAccount(id);
 		return HttpResponse.ok(sum);
 	}
 }
