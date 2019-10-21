@@ -50,6 +50,11 @@ class TestDatabase implements AccountDatabase<TestAccount> {
 		accounts[account.getId()] = account;
 		return true;
 	}
+
+	@Override
+	public boolean updateInSameTransaction(TestAccount one, TestAccount another) {
+		return update(one) && update(another);
+	}
 }
 
 class TestAccount implements Account {

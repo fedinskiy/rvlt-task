@@ -8,4 +8,6 @@ public interface AccountDatabase<T extends Account> {
 	boolean createIfNotExist(T account);
 
 	boolean update(T account);
+
+	boolean updateInSameTransaction(T one, T another);
 }

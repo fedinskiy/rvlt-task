@@ -16,11 +16,10 @@ public class TransactionProcessor {
 	}
 
 	public void transferMoney(int fromId, int toId, int amount) {
-		Account source = getAccount(fromId);
-		Account target = getAccount(toId);
+		Account source = getAccount(fromId).withdraw(amount);
+		Account target = getAccount(toId).add(amount);
 
-		source.withdraw(amount);
-		target.add(amount);
+		database.updateInSameTransaction(source, target);
 	}
 
 	private Account getAccount(int id) {

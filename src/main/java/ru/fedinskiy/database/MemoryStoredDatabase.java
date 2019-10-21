@@ -46,4 +46,9 @@ public class MemoryStoredDatabase implements AccountDatabase<MemoryStoredAccount
 
 		return accounts.replace(id, existing, account);
 	}
+
+	@Override
+	public synchronized boolean updateInSameTransaction(MemoryStoredAccount one, MemoryStoredAccount another) {
+		return update(one) && update(another);
+	}
 }
