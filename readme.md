@@ -17,16 +17,16 @@ By default, port 8080 is used.
 
 #### Use GraalVM
 (optional, requires SDKMAN):
-			`sdk use java 19.2.1-grl`
+`sdk use java 19.2.1-grl`
 
 #### Build:
-		`./gradlew clean assemble`
+`./gradlew clean assemble`
 
 #### Generate native image:
-		`native-image --no-server -O0 -jar build/libs/transfers-*-all.jar`
+`native-image --no-server -O0 -jar build/libs/transfers-*-all.jar`
 
 #### Run:
-		`./transfers-*-all*`
+`./transfers-*-all*`
 
 ## TODOs:
 - Add account creation API and remove database 'loading'
