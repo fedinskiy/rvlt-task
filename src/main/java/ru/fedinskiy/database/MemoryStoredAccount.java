@@ -50,7 +50,7 @@ public final class MemoryStoredAccount implements Account {
 	}
 
 	boolean canBeChangedTo(MemoryStoredAccount other) {
-		return this.id == other.id && this.version+1 == other.version;
+		return this.id == other.id && this.version + 1 == other.version;
 	}
 
 	@Override
