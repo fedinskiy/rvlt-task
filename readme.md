@@ -29,10 +29,8 @@ By default, port 8080 is used.
 `./transfers-*-all*`
 
 ## TODOs:
-- Add account creation API and remove database 'loading'
-- Add thread-safety
-- Update account in database with ACID transactions
 - Decouple account stored in database from wrapper object
+- Add granular locking for db transactions
 - Add error handling
 - Add validation of input parameters
 - Add history of transactions
