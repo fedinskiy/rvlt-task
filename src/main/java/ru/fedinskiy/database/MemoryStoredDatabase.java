@@ -33,7 +33,7 @@ public class MemoryStoredDatabase implements AccountDatabase<MemoryStoredAccount
 	}
 
 	@Override
-	public boolean update(MemoryStoredAccount account) {
+	public synchronized boolean update(MemoryStoredAccount account) {
 		final int id = account.getId();
 		final MemoryStoredAccount existing = accounts.get(id);
 		if (existing == null) {
