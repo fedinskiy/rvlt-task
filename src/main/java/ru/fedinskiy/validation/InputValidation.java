@@ -17,7 +17,7 @@ public interface InputValidation {
 		}
 	}
 
-	private static int toPositiveInteger(String source) throws NumberFormatException, IllegalArgumentException {
+	static int toPositiveInteger(String source) throws NumberFormatException, IllegalArgumentException {
 		final int result = Integer.parseInt(source);
 		if (result <= 0) {
 			throw new IllegalArgumentException("Negative value!");
