@@ -1,11 +1,15 @@
 package ru.fedinskiy.integration;
 
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.fedinskiy.database.Account;
@@ -28,7 +32,7 @@ class TransferControllerITest {
 	@Client("/")
 	HttpClient client;
 
-	private Account first = new MemoryStoredAccount(1);
+	private Account first = new MemoryStoredAccount(1).add(3);
 	private Account second = new MemoryStoredAccount(2);
 
 	@BeforeEach
@@ -39,9 +43,61 @@ class TransferControllerITest {
 
 	@Test
 	void transfer() {
-		String response = client.toBlocking()
-				.retrieve(HttpRequest.POST("/transfer/1/2", "3")
+		HttpResponse<String> response = client.toBlocking()
+				.exchange(HttpRequest.POST("/transfer/1/2", "3")
 						.contentType(MediaType.TEXT_PLAIN));
-		assertEquals("transfered 3 from 1 to 2", response);
+		assertEquals(HttpStatus.OK, response.status());
+	}
+
+	@Test
+	void transferFromInvalid() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/myaccount/2", "3")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
+	void transferToInvalid() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/someone", "3")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
+	void transferNegative() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/2", "-1")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
+	void transferInvalidAmount() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/someone", "million")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
 	}
 }

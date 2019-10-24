@@ -3,6 +3,7 @@ package ru.fedinskiy.transfer;
 import io.micronaut.context.annotation.Prototype;
 import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.validation.AccountNotFoundException;
 
 import javax.inject.Inject;
 
@@ -15,15 +16,18 @@ public class TransactionProcessor {
 		this.database = database;
 	}
 
-	public void transferMoney(int fromId, int toId, int amount) {
-		Account source = getAccount(fromId).withdraw(amount);
-		Account target = getAccount(toId).add(amount);
-
-		database.updateInSameTransaction(source, target);
+	public boolean transferMoney(int fromId, int toId, int amount) throws AccountNotFoundException {
+		final Account source = getAccount(fromId);
+		if (amount > source.getCurrentAmount()) {
+			return false;
+		}
+		final Account changed = source.withdraw(amount);
+		final Account target = getAccount(toId).add(amount);
+		return database.updateInSameTransaction(changed, target);
 	}
 
-	private Account getAccount(int id) {
+	private Account getAccount(int id) throws AccountNotFoundException {
 		return database.get(id)
-				.orElseThrow(() -> new IllegalArgumentException("No account with id " + id));
+				.orElseThrow(() -> new AccountNotFoundException(id));
 	}
 }

@@ -1,6 +1,8 @@
 package ru.fedinskiy.integration;
 
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
@@ -23,9 +25,9 @@ class HeartBeatControllerITest {
 
 	@Test
 	void livenessCheck() {
-		String response = client.toBlocking()
-				.retrieve(HttpRequest.GET("/is_alive")
-						.contentType(MediaType.TEXT_PLAIN));
-		assertEquals("yes", response);
+		HttpResponse<String> response = client.toBlocking()
+				.exchange(HttpRequest.GET("/is_alive").contentType(MediaType.TEXT_PLAIN), String.class);
+		assertEquals(HttpStatus.OK, response.status());
+		assertEquals("yes", response.body());
 	}
 }

@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Prototype;
 import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
 import ru.fedinskiy.database.MemoryStoredAccount;
+import ru.fedinskiy.validation.AccountNotFoundException;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -17,19 +18,23 @@ public class AccountAccessor {
 		this.database = database;
 	}
 
-	public int getCurrentSumOnAccount(int id) {
+	public int getCurrentSumOnAccount(int id) throws AccountNotFoundException {
 		Optional<Account> account = database.get(id);
 		return account.map(Account::getCurrentAmount)
-				.orElseThrow(() -> new IllegalStateException("Account " + id + " not found!"));
+				.orElseThrow(() -> new AccountNotFoundException(id));
 	}
 
-	public void createAccount(int id, int amount) {
+	public AccountCreationResult createAccount(int id, int amount) {
 		final MemoryStoredAccount account = new MemoryStoredAccount(id).add(amount);
 		synchronized (database) {
 			if (database.get(id).isPresent()) {
-				throw new IllegalStateException("Account with id " + id + " exists!");
+				return AccountCreationResult.ALREADY_EXISTS;
 			}
-			database.createIfNotExist(account);
+			if (database.createIfNotExist(account)) {
+				return AccountCreationResult.CREATED;
+			} else {
+				return AccountCreationResult.NOT_CREATED;
+			}
 		}
 	}
 }
