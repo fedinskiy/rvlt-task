@@ -51,7 +51,11 @@ public class AccountController implements InputValidation {
 	@Override
 	public int parseAmount(String source) throws InvalidAmountException {
 		try {
-			return Integer.parseInt(source);
+			final int result = Integer.parseInt(source);
+			if (result < 0) {
+				throw new IllegalArgumentException("Negative value!");
+			}
+			return result;
 		} catch (Exception ex) {
 			throw new InvalidAmountException(source);
 		}

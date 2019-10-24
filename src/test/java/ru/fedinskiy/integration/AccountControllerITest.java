@@ -64,6 +64,19 @@ class AccountControllerITest {
 		assertEquals(0, created.getCurrentAmount());
 	}
 
+	@Test
+	void createWithNegativeAmount() {
+		try{
+			final HttpResponse<Object> response = client.toBlocking()
+					.exchange(HttpRequest.POST("/accounts/14", "-1")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
 	private Account obtainAccount(int id) {
 		return database.get(id).orElseThrow(() -> new AssertionError("Account was not created!"));
 	}
