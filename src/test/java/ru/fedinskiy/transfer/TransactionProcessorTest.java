@@ -3,17 +3,20 @@ package ru.fedinskiy.transfer;
 import org.junit.jupiter.api.Test;
 import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.validation.AccountNotFoundException;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TransactionProcessorTest {
 	private final AccountDatabase database = new TestDatabase();
 	private final TransactionProcessor processor = new TransactionProcessor(database);
 
 	@Test
-	void transferMoney() {
+	void transferMoney() throws AccountNotFoundException {
 		TestAccount first = new TestAccount(1);
 		first.add(11);
 		TestAccount second = new TestAccount(2);
@@ -21,9 +24,25 @@ class TransactionProcessorTest {
 		database.createIfNotExist(first);
 		database.createIfNotExist(second);
 
-		processor.transferMoney(1, 2, 10);
+		final boolean success = processor.transferMoney(1, 2, 10);
+		assertTrue(success);
 		assertEquals(1, first.getCurrentAmount());
 		assertEquals(12, second.getCurrentAmount());
+	}
+
+	@Test
+	void transferTooMuchMoney() throws AccountNotFoundException {
+		TestAccount first = new TestAccount(3);
+		first.add(11);
+		TestAccount second = new TestAccount(4);
+		second.add(2);
+		database.createIfNotExist(first);
+		database.createIfNotExist(second);
+
+		final boolean success = processor.transferMoney(3, 4, 100);
+		assertFalse(success);
+		assertEquals(11, first.getCurrentAmount());
+		assertEquals(2, second.getCurrentAmount());
 	}
 }
 

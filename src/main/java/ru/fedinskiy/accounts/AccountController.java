@@ -44,7 +44,6 @@ public class AccountController implements InputValidation {
 	}
 
 
-
 	private int nullToZero(String nullable) throws InvalidAmountException {
 		return nullable == null ? 0 : parseAmount(nullable);
 	}
@@ -53,7 +52,7 @@ public class AccountController implements InputValidation {
 	public int parseAmount(String source) throws InvalidAmountException {
 		try {
 			return Integer.parseInt(source);
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			throw new InvalidAmountException(source);
 		}
 	}
