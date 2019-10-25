@@ -12,9 +12,8 @@ import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
-import ru.fedinskiy.database.MemoryStoredAccount;
+import ru.fedinskiy.database.ImmutableAccount;
 
 import javax.inject.Inject;
 
@@ -32,8 +31,8 @@ class TransferControllerITest {
 	@Client("/")
 	HttpClient client;
 
-	private Account first = new MemoryStoredAccount(1).add(3);
-	private Account second = new MemoryStoredAccount(2);
+	private ImmutableAccount first = new ImmutableAccount(1).add(3);
+	private ImmutableAccount second = new ImmutableAccount(2);
 
 	@BeforeEach
 	void setUp() {

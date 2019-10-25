@@ -1,7 +1,6 @@
 package ru.fedinskiy.transfer;
 
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
 import ru.fedinskiy.validation.AccountNotFoundException;
 
@@ -26,8 +25,8 @@ class TransactionProcessorTest {
 
 		final boolean success = processor.transferMoney(1, 2, 10);
 		assertTrue(success);
-		assertEquals(1, first.getCurrentAmount());
-		assertEquals(12, second.getCurrentAmount());
+		assertEquals(1, first.amount);
+		assertEquals(12, second.amount);
 	}
 
 	@Test
@@ -41,8 +40,8 @@ class TransactionProcessorTest {
 
 		final boolean success = processor.transferMoney(3, 4, 100);
 		assertFalse(success);
-		assertEquals(11, first.getCurrentAmount());
-		assertEquals(2, second.getCurrentAmount());
+		assertEquals(11, first.amount);
+		assertEquals(2, second.amount);
 	}
 }
 
@@ -76,7 +75,7 @@ class TestDatabase implements AccountDatabase<TestAccount> {
 	}
 }
 
-class TestAccount implements Account {
+class TestAccount implements MoneyHolder {
 	final int id;
 	int amount;
 
@@ -90,19 +89,18 @@ class TestAccount implements Account {
 		this.amount = 0;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}
 
 	@Override
-	public Account add(int sum) {
+	public TestAccount add(int sum) {
 		this.amount += sum;
 		return this;
 	}
 
 	@Override
-	public Account withdraw(int sum) {
+	public TestAccount withdraw(int sum) {
 		this.amount -= sum;
 		return this;
 	}

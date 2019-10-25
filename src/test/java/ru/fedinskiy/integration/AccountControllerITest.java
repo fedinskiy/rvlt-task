@@ -11,8 +11,9 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.Account;
 import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.database.ImmutableAccount;
+import ru.fedinskiy.database.VersionedAccount;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,7 @@ class AccountControllerITest {
 	EmbeddedServer server;
 
 	@Inject
-	AccountDatabase<Account> database;
+	AccountDatabase<ImmutableAccount> database;
 
 	@Inject
 	@Client("/")
@@ -38,7 +39,7 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/11", "112")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final Account created = obtainAccount(11);
+		final VersionedAccount created = obtainAccount(11);
 		assertEquals(112, created.getCurrentAmount());
 	}
 
@@ -49,7 +50,7 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/13", "")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final Account created = obtainAccount(13);
+		final VersionedAccount created = obtainAccount(13);
 		assertEquals(0, created.getCurrentAmount());
 	}
 
@@ -60,24 +61,24 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/14", "0")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final Account created = obtainAccount(14);
+		final VersionedAccount created = obtainAccount(14);
 		assertEquals(0, created.getCurrentAmount());
 	}
 
 	@Test
 	void createWithNegativeAmount() {
-		try{
+		try {
 			final HttpResponse<Object> response = client.toBlocking()
 					.exchange(HttpRequest.POST("/accounts/14", "-1")
 							          .contentType(MediaType.TEXT_PLAIN));
-		} catch (HttpClientResponseException response){
+		} catch (HttpClientResponseException response) {
 			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
 			return;
 		}
 		Assertions.fail();
 	}
 
-	private Account obtainAccount(int id) {
+	private VersionedAccount obtainAccount(int id) {
 		return database.get(id).orElseThrow(() -> new AssertionError("Account was not created!"));
 	}
 
