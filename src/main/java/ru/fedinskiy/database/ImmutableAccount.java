@@ -1,19 +1,27 @@
 package ru.fedinskiy.database;
 
+import ru.fedinskiy.model.Transactable;
+
 import java.util.Objects;
 
-public final class MemoryStoredAccount implements Account {
+public final class ImmutableAccount implements VersionedAccount, Transactable {
 	private final int id;
 	private final int amount;
 	private final int version;
 
-	public MemoryStoredAccount(int id) {
+	public ImmutableAccount(int id) {
 		this.id = id;
 		this.amount = 0;
 		this.version = 0;
 	}
 
-	private MemoryStoredAccount(int id, int amount, int version) {
+	public ImmutableAccount(VersionedAccount account) {
+		this.id = account.getId();
+		this.amount = account.getCurrentAmount();
+		this.version = account.getVersion();
+	}
+
+	private ImmutableAccount(int id, int amount, int version) {
 		this.id = id;
 		this.amount = amount;
 		this.version = version;
@@ -24,16 +32,14 @@ public final class MemoryStoredAccount implements Account {
 		return id;
 	}
 
-	@Override
-	public MemoryStoredAccount add(int sum) {
+	public ImmutableAccount add(int sum) {
 		int newAmount = amount + sum;
-		return new MemoryStoredAccount(id, newAmount, incrementedVersion());
+		return new ImmutableAccount(id, newAmount, incrementedVersion());
 	}
 
-	@Override
-	public MemoryStoredAccount withdraw(int sum) {
+	public ImmutableAccount withdraw(int sum) {
 		final int newAmount = this.amount - sum;
-		return new MemoryStoredAccount(id, newAmount, incrementedVersion());
+		return new ImmutableAccount(id, newAmount, incrementedVersion());
 	}
 
 	@Override
@@ -49,15 +55,11 @@ public final class MemoryStoredAccount implements Account {
 		return version + 1;
 	}
 
-	boolean canBeChangedTo(MemoryStoredAccount other) {
-		return this.id == other.id && this.version + 1 == other.version;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		MemoryStoredAccount that = (MemoryStoredAccount) o;
+		ImmutableAccount that = (ImmutableAccount) o;
 		return id == that.id &&
 				amount == that.amount &&
 				version == that.version;

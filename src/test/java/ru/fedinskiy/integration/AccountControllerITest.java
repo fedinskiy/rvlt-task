@@ -11,8 +11,9 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.Account;
-import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.model.Account;
+import ru.fedinskiy.model.AccountDatabase;
+import ru.fedinskiy.model.Transactable;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,7 @@ class AccountControllerITest {
 	EmbeddedServer server;
 
 	@Inject
-	AccountDatabase<Account> database;
+	AccountDatabase<Transactable> database;
 
 	@Inject
 	@Client("/")
@@ -66,11 +67,11 @@ class AccountControllerITest {
 
 	@Test
 	void createWithNegativeAmount() {
-		try{
+		try {
 			final HttpResponse<Object> response = client.toBlocking()
 					.exchange(HttpRequest.POST("/accounts/14", "-1")
 							          .contentType(MediaType.TEXT_PLAIN));
-		} catch (HttpClientResponseException response){
+		} catch (HttpClientResponseException response) {
 			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
 			return;
 		}

@@ -1,8 +1,8 @@
-package ru.fedinskiy.database;
+package ru.fedinskiy.model;
 
 import java.util.Optional;
 
-public interface AccountDatabase<T extends Account> {
+public interface AccountDatabase<T extends Transactable> {
 	Optional<T> get(int id);
 
 	boolean createIfNotExist(T account);
