@@ -1,9 +1,9 @@
 package ru.fedinskiy.database;
 
-public interface VersionedAccount {
-	int getId();
+import ru.fedinskiy.model.Account;
 
-	int getCurrentAmount();
+interface VersionedAccount extends Account {
+	int getId();
 
 	int getVersion();
 

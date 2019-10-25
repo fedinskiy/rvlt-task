@@ -11,9 +11,9 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.AccountDatabase;
-import ru.fedinskiy.database.ImmutableAccount;
-import ru.fedinskiy.database.VersionedAccount;
+import ru.fedinskiy.model.Account;
+import ru.fedinskiy.model.AccountDatabase;
+import ru.fedinskiy.model.Transactable;
 
 import javax.inject.Inject;
 
@@ -26,7 +26,7 @@ class AccountControllerITest {
 	EmbeddedServer server;
 
 	@Inject
-	AccountDatabase<ImmutableAccount> database;
+	AccountDatabase<Transactable> database;
 
 	@Inject
 	@Client("/")
@@ -39,7 +39,7 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/11", "112")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final VersionedAccount created = obtainAccount(11);
+		final Account created = obtainAccount(11);
 		assertEquals(112, created.getCurrentAmount());
 	}
 
@@ -50,7 +50,7 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/13", "")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final VersionedAccount created = obtainAccount(13);
+		final Account created = obtainAccount(13);
 		assertEquals(0, created.getCurrentAmount());
 	}
 
@@ -61,7 +61,7 @@ class AccountControllerITest {
 				.exchange(HttpRequest.POST("/accounts/14", "0")
 						          .contentType(MediaType.TEXT_PLAIN));
 		assertEquals(HttpStatus.CREATED, response.getStatus());
-		final VersionedAccount created = obtainAccount(14);
+		final Account created = obtainAccount(14);
 		assertEquals(0, created.getCurrentAmount());
 	}
 
@@ -78,7 +78,7 @@ class AccountControllerITest {
 		Assertions.fail();
 	}
 
-	private VersionedAccount obtainAccount(int id) {
+	private Account obtainAccount(int id) {
 		return database.get(id).orElseThrow(() -> new AssertionError("Account was not created!"));
 	}
 

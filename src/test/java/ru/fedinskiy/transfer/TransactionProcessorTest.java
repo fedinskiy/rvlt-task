@@ -1,7 +1,8 @@
 package ru.fedinskiy.transfer;
 
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.model.AccountDatabase;
+import ru.fedinskiy.model.Transactable;
 import ru.fedinskiy.validation.AccountNotFoundException;
 
 import java.util.Optional;
@@ -75,7 +76,7 @@ class TestDatabase implements AccountDatabase<TestAccount> {
 	}
 }
 
-class TestAccount implements MoneyHolder {
+class TestAccount implements Transactable {
 	final int id;
 	int amount;
 

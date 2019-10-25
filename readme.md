@@ -30,8 +30,6 @@ By default, port 8080 is used.
 
 ## TODOs:
 - Documentation of REST API
-- Decouple account stored in database from wrapper object
-- Add granular locking for db transactions
 - Add history of transactions
 - Use some web router instead of framework
 - Tune up native image generation

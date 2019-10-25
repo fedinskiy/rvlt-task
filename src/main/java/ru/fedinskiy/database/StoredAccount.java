@@ -2,12 +2,12 @@ package ru.fedinskiy.database;
 
 import java.util.Objects;
 
-public final class StoredAccount implements VersionedAccount {
+final class StoredAccount implements VersionedAccount {
 	private final int id;
 	private volatile int amount;
 	private volatile int version;
 
-	public StoredAccount(VersionedAccount account) {
+	StoredAccount(VersionedAccount account) {
 		this.id = account.getId();
 		this.amount = account.getCurrentAmount();
 		this.version = 0;

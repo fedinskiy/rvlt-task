@@ -1,10 +1,10 @@
 package ru.fedinskiy.database;
 
-import ru.fedinskiy.transfer.MoneyHolder;
+import ru.fedinskiy.model.Transactable;
 
 import java.util.Objects;
 
-public final class ImmutableAccount implements VersionedAccount, MoneyHolder {
+public final class ImmutableAccount implements VersionedAccount, Transactable {
 	private final int id;
 	private final int amount;
 	private final int version;

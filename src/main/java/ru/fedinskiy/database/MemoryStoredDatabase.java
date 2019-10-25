@@ -1,6 +1,7 @@
 package ru.fedinskiy.database;
 
 import io.micronaut.context.annotation.Context;
+import ru.fedinskiy.model.AccountDatabase;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

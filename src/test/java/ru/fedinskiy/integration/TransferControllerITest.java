@@ -12,7 +12,7 @@ import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.fedinskiy.database.AccountDatabase;
+import ru.fedinskiy.model.AccountDatabase;
 import ru.fedinskiy.database.ImmutableAccount;
 
 import javax.inject.Inject;

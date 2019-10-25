@@ -1,9 +1,10 @@
 package ru.fedinskiy.accounts;
 
 import io.micronaut.context.annotation.Prototype;
-import ru.fedinskiy.database.AccountDatabase;
 import ru.fedinskiy.database.ImmutableAccount;
-import ru.fedinskiy.database.VersionedAccount;
+import ru.fedinskiy.model.Account;
+import ru.fedinskiy.model.AccountDatabase;
+import ru.fedinskiy.model.Transactable;
 import ru.fedinskiy.validation.AccountNotFoundException;
 
 import javax.inject.Inject;
@@ -11,16 +12,16 @@ import java.util.Optional;
 
 @Prototype
 public class AccountAccessor {
-	private final AccountDatabase<ImmutableAccount> database;
+	private final AccountDatabase<Transactable> database;
 
 	@Inject
-	public AccountAccessor(AccountDatabase<ImmutableAccount> database) {
+	public AccountAccessor(AccountDatabase<Transactable> database) {
 		this.database = database;
 	}
 
 	public int getCurrentSumOnAccount(int id) throws AccountNotFoundException {
-		Optional<ImmutableAccount> account = database.get(id);
-		return account.map(VersionedAccount::getCurrentAmount)
+		Optional<Transactable> account = database.get(id);
+		return account.map(Account::getCurrentAmount)
 				.orElseThrow(() -> new AccountNotFoundException(id));
 	}
 
