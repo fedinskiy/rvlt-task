@@ -101,6 +101,32 @@ class TransferControllerITest {
 	}
 
 	@Test
+	void transferZero() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/2", "0")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
+	void transferNothing() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/2", "")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
 	void transferToOneself() {
 		try{
 			client.toBlocking()
