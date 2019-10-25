@@ -14,7 +14,7 @@ class IdOrderedPair {
 			this.first = right;
 			this.second = left;
 		} else {
-			throw new IllegalArgumentException("Account " + leftId + " cannot be updated at the same time withn itself!");
+			throw new IllegalArgumentException("Account " + leftId + " cannot be updated at the same time with itself!");
 		}
 	}
 

@@ -91,7 +91,20 @@ class TransferControllerITest {
 	void transferInvalidAmount() {
 		try{
 			client.toBlocking()
-					.exchange(HttpRequest.POST("/transfer/1/someone", "million")
+					.exchange(HttpRequest.POST("/transfer/1/2", "million")
+							          .contentType(MediaType.TEXT_PLAIN));
+		} catch (HttpClientResponseException response){
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+			return;
+		}
+		Assertions.fail();
+	}
+
+	@Test
+	void transferToOneself() {
+		try{
+			client.toBlocking()
+					.exchange(HttpRequest.POST("/transfer/1/1", "1")
 							          .contentType(MediaType.TEXT_PLAIN));
 		} catch (HttpClientResponseException response){
 			assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());

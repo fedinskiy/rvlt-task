@@ -17,6 +17,9 @@ public class TransactionProcessor {
 	}
 
 	public boolean transferMoney(int fromId, int toId, int amount) throws AccountNotFoundException {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Only positive amount of money can be transferred!");
+		}
 		final Transactable source = getAccount(fromId);
 		if (amount > source.getCurrentAmount()) {
 			return false;

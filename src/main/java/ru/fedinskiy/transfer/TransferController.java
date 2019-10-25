@@ -35,8 +35,13 @@ public class TransferController implements InputValidation {
 		LOGGER.warn("Transferring {} from {} to {}", amount, rawFromId, rawToId);
 
 		try {
-			final boolean success = processor.transferMoney(parseId(rawFromId),
-			                                                parseId(rawToId),
+			final int fromId = parseId(rawFromId);
+			final int toId = parseId(rawToId);
+			if (fromId == toId) {
+				return HttpResponse.status(HttpStatus.BAD_REQUEST).body("Transfer on same id: " + fromId);
+			}
+			final boolean success = processor.transferMoney(fromId,
+			                                                toId,
 			                                                parseAmount(amount));
 			if (success) {
 				return HttpResponse
