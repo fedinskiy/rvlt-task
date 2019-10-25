@@ -4,7 +4,7 @@ plugins {
     id "application"
 }
 
-version "0.3"
+version "0.4"
 group "ru.fedinskiy"
 
 repositories {
